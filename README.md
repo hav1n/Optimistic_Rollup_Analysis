@@ -123,6 +123,8 @@ If you use these datasets in your research, please cite:
   year={2025}
 }
 ```
+## License
+This dataset is released under CC BY 4.0.
 
 ## Contact
 
