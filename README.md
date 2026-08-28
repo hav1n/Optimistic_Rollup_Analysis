@@ -1,133 +1,112 @@
-# From Cost Efficiency to Secure Design: Analyzing Operational Costs in Optimistic Rollups
+# Analysis on Operational Cost and Economic Sustainability of Optimistic Rollups
 
-This repository contains the datasets and SQL queries accompanying the paper:
+This repository contains the datasets, query templates, and figure scripts accompanying the paper:
 
-> **From Cost Efficiency to Secure Design: Analyzing Operational Costs in Optimistic Rollups**  
-> Hojung Yang, Suhyeon Lee, Seungjoo Kim  
-> *Journal of Network and Computer Applications (JNCA)*
+> **Analysis on Operational Cost and Economic Sustainability of Optimistic Rollups**
+> Hojung Yang, Suhyeon Lee, Seungjoo Kim
+> *Under review at the IEEE Internet of Things Journal, 2026.*
 
 ## Overview
 
-The paper analyzes operational costs across 17 Optimistic Rollups classified into four decentralization levels. It evaluates sequencer infrastructure, validator infrastructure, data availability (DA) gas, and Layer 2 fee components using empirical data from deployed systems. The analysis includes cross-sectional comparison, a calibrated cost estimation model, and time-series measurements from Arbitrum One, OP Mainnet, and Base throughout 2024.
+The paper measures the operational cost and fee revenue of 17 deployed Optimistic
+Rollups (ORUs), classified by the L2Beat maturity framework (Stage 0--2, with
+unclassified chains split into U0/U1 by the presence of a fraud-proof mechanism).
+Monthly cost is decomposed as
+
+```
+C_total = C_node + C_DA
+        = (c_comp + c_stor(S)) + (a_blob * V_blob + a_cd * V_cd) * P_ETH
+```
+
+where node cost covers compute and storage and data-availability (DA) cost covers
+calldata and blob gas. The cross-section is measured over April 2026 (the most
+recent complete month at collection; see the `Period` column for the two
+discontinued rollups), and daily time series for Arbitrum One, OP Mainnet, and
+Base span January 2024 through April 2026. The ETH price used throughout is
+P_ETH = $2,252, the April 2026 monthly average.
 
 ## Repository Structure
 
 ```
 ├── README.md
-├── DESCRIPTION.md              # Detailed column-level documentation for each dataset
+├── DESCRIPTION.md                  # Column-level documentation for each dataset
+├── LICENSE                         # CC BY 4.0
 ├── data/
-│   ├── rollup_infrastructure.csv       # Table 1: Infrastructure & cost attributes (17 rollups)
-│   ├── rollup_radar_normalized.csv     # Figure 2: Normalized radar chart values
-│   ├── cost_estimation_inputs.csv      # Table 2 & Figure 3: Cost model parameters
+│   ├── rollup_cross_section.csv    # 17 rollups: hardware, nodes, DA gas, fees
+│   ├── da_decomposition_apr2026.csv# Calldata / blob split of DA cost
+│   ├── rollup_radar_normalized.csv # Normalized values behind the radar charts
 │   └── timeseries/
-│       ├── timeseries_arbitrum_one.csv  # Figure 4: Arbitrum One daily data (2024)
-│       ├── timeseries_op_mainnet.csv    # Figure 5: OP Mainnet daily data (2024)
-│       └── timeseries_base.csv         # Figure 6: Base daily data (2024)
+│       ├── arbitrum_one.csv
+│       ├── op_mainnet.csv
+│       └── base.csv
 ├── queries/
-│   └── timeseries_query.sql            # Dune Analytics SQL template (Appendix C)
-└── LICENSE
+│   ├── da_gas_batches.sql          # Dune template: per-batch calldata + blob gas
+│   └── l2_tx_fee.sql               # Dune template: daily tx count and L2 fees
+└── figures/
+    ├── fig2_radar.py
+    ├── fig4_cost_breakdown.py
+    └── fig5_timeseries.py
 ```
 
-## Dataset Summary
+## Paper-to-File Mapping
 
-| File | Records | Period | Paper Reference |
-|------|---------|--------|-----------------|
-| `rollup_infrastructure.csv` | 17 rollups | Dec 2024 | Table 1 |
-| `rollup_radar_normalized.csv` | 17 rollups | Dec 2024 | Figure 2 |
-| `cost_estimation_inputs.csv` | 17 rollups | Dec 2024 | Table 2, Figure 3 |
-| `timeseries_arbitrum_one.csv` | 366 days | Jan–Dec 2024 | Figure 4 |
-| `timeseries_op_mainnet.csv` | 366 days | Jan–Dec 2024 | Figure 5 |
-| `timeseries_base.csv` | 366 days | Jan–Dec 2024 | Figure 6 |
+| Paper object | Source in this repository |
+|---|---|
+| Table II (infrastructure and cost attributes) | `data/rollup_cross_section.csv` |
+| Table V (calldata / blob decomposition) | `data/da_decomposition_apr2026.csv` |
+| Fig. 2 (cost radar charts) | `data/rollup_radar_normalized.csv` + `figures/fig2_radar.py` |
+| Fig. 4 (cost breakdown and cost vs. revenue) | `data/rollup_cross_section.csv`, `data/da_decomposition_apr2026.csv` + `figures/fig4_cost_breakdown.py` |
+| Fig. 5 (daily time series) | `data/timeseries/*.csv` + `figures/fig5_timeseries.py` |
+| DA gas measurement (Sections IV--V) | `queries/da_gas_batches.sql` |
+| Transaction counts and L2 fees | `queries/l2_tx_fee.sql` |
 
-Detailed column definitions and usage notes are available in [`DESCRIPTION.md`](DESCRIPTION.md).
-
-## Rollups Analyzed
-
-The study covers the following 17 Optimistic Rollups across four decentralization levels:
-
-| Level | Rollups |
-|-------|---------|
-| Level 1 (Minimally Supported) | DeBank Chain, Optopia |
-| Level 2 (Enhanced Validator) | Blast, Mode Network, Lisk, Taiko, Kinto, Zora, Boba, Mint, SuperLumio, Metal |
-| Level 3 (Incentivized) | Arbitrum One |
-| Level 4 (Fully Decentralized) | Kroma, Base, OP Mainnet, Fuel v1 |
+Tables III, IV, VI--VIII and the thresholds of Section VI are derived from the
+files above; the derivations (Spearman statistics, the alpha calibration, and the
+break-even and crossover formulas) are specified in the paper.
 
 ## Data Collection
 
-- **Observation window:** December 2024 (cross-sectional data); January–December 2024 (time-series data)
-- **On-chain data:** Dune Analytics (SQL queries in `queries/`), Etherscan (batch submission gas parsing)
-- **Off-chain data:** Official documentation, L2Beat, developer forums, public dashboards
-- **Infrastructure pricing:** AWS EC2 pricing as of December 2024
+- **Cross-section window:** 1--30 April 2026. The two discontinued rollups are
+  reported at the snapshot recorded in their `Period` field.
+- **On-chain data:** Dune Analytics (templates in `queries/`), with chain-specific
+  block explorers for rollups not indexed by Dune.
+- **Off-chain data:** L2Beat (maturity classification, validator composition) and
+  official operator documentation (hardware requirements).
+- **Infrastructure pricing:** AWS us-east-1 on-demand EC2 rates at 730 hours per
+  month plus gp3 storage at $0.08 per GB-month. TB-denominated requirements are
+  priced as 1,024 GB. See `DESCRIPTION.md` for the per-column conventions.
 
-For full methodology, see Section 3 of the paper.
+**Known data caveat.** Blast's documented storage requirement (1 TB) is priced as
+100 GB in its reported node cost; we retain the figure as collected and flag the
+inconsistency, which shifts Blast's node cost by $72 per month and does not affect
+any threshold in the paper.
 
-## Cost Estimation Model
+## Reproducing the Queries
 
-The operational cost model (Section 5.1) decomposes monthly cost into three components:
-
-```
-C_operational = C_infra + B_DA + B_commit
-```
-
-where:
-- **C_infra** = infrastructure cost (sequencer + validator nodes)
-- **B_DA** = data availability gas cost
-- **B_commit** = finalization commitment cost
-
-Input parameters for reproducing Table 2 and Figure 3 are provided in `cost_estimation_inputs.csv`. Batching parameters are calibrated from observed batch counts: median intervals of ~46.60 min (Levels 1–2) and ~2.05 min (Levels 3–4).
-
-## SQL Query
-
-The time-series data were collected using the following Dune Analytics query template. Replace `{rollup}` with the chain table name and `{sequencer_address}` with the corresponding sequencer wallet address.
-
-```sql
-WITH tx_data AS (
-    SELECT
-        DATE_TRUNC('day', block_time) AS day,
-        COUNT(*) AS tx_count,
-        SUM(CAST(gas_used AS DOUBLE) * CAST(gas_price AS DOUBLE)) / 1e18 AS l2_fee_eth
-    FROM {rollup}.transactions
-    WHERE DATE(block_time) >= DATE('2024-01-01')
-      AND DATE(block_time) < DATE('2025-01-01')
-    GROUP BY 1
-),
-l1_gas AS (
-    SELECT
-        DATE_TRUNC('day', block_time) AS day,
-        SUM(CAST(gas_used AS DOUBLE) * CAST(gas_price AS DOUBLE)) / 1e18 AS gas_cost_eth
-    FROM ethereum.transactions
-    WHERE "from" = {sequencer_address}
-      AND DATE(block_time) >= DATE('2024-01-01')
-      AND DATE(block_time) < DATE('2025-01-01')
-    GROUP BY 1
-)
-SELECT
-    tx_data.day,
-    tx_data.tx_count,
-    tx_data.l2_fee_eth,
-    l1_gas.gas_cost_eth
-FROM tx_data
-LEFT JOIN l1_gas ON tx_data.day = l1_gas.day
-ORDER BY tx_data.day
-```
+Both SQL templates run on [Dune Analytics](https://dune.com). Replace the
+placeholders with the chain table name and the Layer 1 address given in the
+`Sequencer Address` column of `data/rollup_cross_section.csv`. Batcher EOAs are
+filtered as the transaction sender (`from`); inbox contracts are filtered as the
+recipient (`to`). See the header comments of each query for details.
 
 ## Citation
 
-If you use these datasets in your research, please cite:
-
 ```bibtex
-@article{yang2025costefficiency,
-  title={From Cost Efficiency to Secure Design: Analyzing Operational Costs in Optimistic Rollups},
-  author={Yang, Hojung and Lee, Suhyeon and Kim, Seungjoo},
-  journal={Journal of Network and Computer Applications},
-  year={2025}
+@article{yang2026oru,
+  title   = {Analysis on Operational Cost and Economic Sustainability of Optimistic Rollups},
+  author  = {Yang, Hojung and Lee, Suhyeon and Kim, Seungjoo},
+  journal = {IEEE Internet of Things Journal},
+  year    = {2026},
+  note    = {Under review}
 }
 ```
+
 ## License
-This dataset is released under CC BY 4.0.
+
+Released under CC BY 4.0. The figure scripts are provided under the same terms.
 
 ## Contact
 
 - Hojung Yang — ghwjd0816@korea.ac.kr
-- Suhyeon Lee — suhyeon@tokamak.network
+- Suhyeon Lee — orion-alpha@korea.ac.kr
 - Seungjoo Kim — skim71@korea.ac.kr
