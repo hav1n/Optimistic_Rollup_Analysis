@@ -1,0 +1,23 @@
+Rollup,Status,Stage,Built on,Fraud-proof,Proof System,Period,CPU,RAM,SSD,Instance,USD/Month,#Sequencer,#Validator,Tx/month,DA Gas (ETH),L2 Fee (ETH),Incentive,Sequencer Address
+DeBank Chain,Active,UNCLASSIFIED,OP Stack,N/A,[Proof: None / OP Stack default],Apr.26,4 core,16GB,100GB,t3.xlarge,129.47,1,1,5467935,0.9985,0.350225,N/A,0x7aB7da0C3117D7Dfe0ABfAA8d8D33883f8477C74
+Blast,Active,UNCLASSIFIED,OP Stack,N/A,[Proof: None / OP Stack default],Apr.26,4 core,16GB,100GB,t3.xlarge,129.47,1,1,1304100,0.0721,0.001955,N/A,0x415c8893D514F9BC5211d36eEDA4183226b84AA7
+Optopia,Defunct,UNCLASSIFIED,OP Stack,N/A,[Proof: None / OP Stack default],Dec.24,4 core,16GB,100GB,t3.xlarge,129.47,1,1,343,0.000328,0.00174,N/A,0x3D0Bf26E60a689a7Da5EA3ddAD7371F27f7671a5
+Mode Network,Active,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Apr.26,4 core,16GB,200GB,t3.xlarge,137.47,1,2,2271086,0.2782,0.1209,F,0x99199a22125034c808ff20f377d91187E8050F2E
+Lisk,Active,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Apr.26,2 core,8GB,500GB,t3.large,100.74,1,1,1575907,0.0932,0.235515,F,0xa6Ea2f3299b63c53143c993d2d5E60A69Cd6Fe24
+Taiko,Active,UNCLASSIFIED,Taiko,SGX proofs,[Proof: SGX / Permissioned(<5)],Apr.26,4 core,16GB,2TB,t3.xlarge,285.31,D,1,1677387,1.992,3.2939,N/A,0x6f21C543a4aF5189eBdb0723827577e1EF57ef1f(INBOX)
+Zora,Active,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Apr.26,4 core,16GB,150GB,t3.xlarge,133.47,1,2,1413788,0.1371,0.095616,F,0x625726c858dBF78c0125436C943Bf4b4bE9d9033
+Boba,Active,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Apr.26,4 core,16GB,100GB,t3.xlarge,129.47,1,1,1347829,0.1454,0.06337,F,0xA4eD58737Fc5C4861C33410c29ECb1E2AF29d960
+Metal,Active,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Apr.26,4 core,16GB,2TB,t3.xlarge,285.31,1,2,1307012,2.0025,0.015606,F,0xC94C243f8fb37223F3EB2f7961F7072602A51B8B
+Mint,Defunct,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Mar.26,2 core,8GB,800GB,t3.large,124.74,1,1,4051,0.000291,0.009603,F,0x560aFA9cF6B39D8C83938C77036E80807a56Da16
+Morph,Active,0,Morph,ZK fault proofs,[Proof: ZK / Permissioned],Apr.26,4 core,32GB,1TB,m5.2xlarge,362.24,5,8,173752,0.2923,0.336391,F,0x759894Ced0e6af42c26668076Ffa84d02E3CeF60(INBOX)
+Arbitrum One,Active,1,Arbitrum Nitro,Bisection games,[Proof: Optimistic / Permissionless],Apr.26,8 core,64GB,5TB,m5.4xlarge,970.24,3,D,60216343,5.2762,160.21,F+I,0x1c479675ad559DC151F6Ec7ed3FbF8ceE79582B6(INBOX)
+Base,Active,1,OP Stack,Bisection games,[Proof: Optimistic / Permissionless],Apr.26,4 core,32GB,30TB,m5.2xlarge,2737.92,1,D,236709943,37.646,1208.12,F,0x5050F69a9786F081509234F1a7F4684b5E5b76C9
+OP Mainnet,Active,1,OP Stack,Bisection games,[Proof: Optimistic / Permissionless],Apr.26,4 core,16GB,1TB,t3.xlarge,203.39,1,D,50278926,5.1475,21.81,F,0x6887246668a3b87F54DeB3b94Ba47a6f63F32985
+Ink,Active,1,OP Stack,Bisection games,[Proof: Optimistic / Permissionless],Apr.26,4 core,16GB,2TB,t3.xlarge,285.31,1,D,14737193,2.2581,4.734,F,0x500d7Ea63CF2E501dadaA5feeC1FC19FE2Aa72Ac
+Unichain,Active,1,OP Stack,Bisection games,[Proof: Optimistic / Permissionless],Apr.26,4 core,16GB,500GB,t3.xlarge,161.47,1,D,22064453,2.9229,2.1724,F,0x2F60A5184c63ca94f82a27100643DbAbe4F3f7Fd
+Facet v1,Active,2,OP Stack,ZK proofs,[Proof: ZK / Permissionless],Apr.26,4 core,16GB,50GB,t3.xlarge,125.47,D,D,217554,0.2174,0.012731,N/A,0x00000000000000000000000000000000000FacE7(INBOX)
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
