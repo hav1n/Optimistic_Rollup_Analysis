@@ -8,7 +8,7 @@ Taiko,Active,UNCLASSIFIED,Taiko,SGX proofs,[Proof: SGX / Permissioned(<5)],Apr.2
 Zora,Active,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Apr.26,4 core,16GB,150GB,t3.xlarge,133.47,1,2,1413788,0.1371,0.095616,F,0x625726c858dBF78c0125436C943Bf4b4bE9d9033
 Boba,Active,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Apr.26,4 core,16GB,100GB,t3.xlarge,129.47,1,1,1347829,0.1454,0.06337,F,0xA4eD58737Fc5C4861C33410c29ECb1E2AF29d960
 Metal,Active,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Apr.26,4 core,16GB,2TB,t3.xlarge,285.31,1,2,1307012,2.0025,0.015606,F,0xC94C243f8fb37223F3EB2f7961F7072602A51B8B
-Mint,Defunct,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Mar.26,2 core,8GB,800GB,t3.large,124.74,1,1,4051,0.000291,0.009603,F,0x560aFA9cF6B39D8C83938C77036E80807a56Da16
+Mint,Defunct,UNCLASSIFIED,OP Stack,Bisection games,[Proof: Optimistic / Permissioned(<5)],Dec.24,2 core,8GB,800GB,t3.large,124.74,1,1,4051,0.000291,0.009603,F,0x560aFA9cF6B39D8C83938C77036E80807a56Da16
 Morph,Active,0,Morph,ZK fault proofs,[Proof: ZK / Permissioned],Apr.26,4 core,32GB,1TB,m5.2xlarge,362.24,5,8,173752,0.2923,0.336391,F,0x759894Ced0e6af42c26668076Ffa84d02E3CeF60(INBOX)
 Arbitrum One,Active,1,Arbitrum Nitro,Bisection games,[Proof: Optimistic / Permissionless],Apr.26,8 core,64GB,5TB,m5.4xlarge,970.24,3,D,60216343,5.2762,160.21,F+I,0x1c479675ad559DC151F6Ec7ed3FbF8ceE79582B6(INBOX)
 Base,Active,1,OP Stack,Bisection games,[Proof: Optimistic / Permissionless],Apr.26,4 core,32GB,30TB,m5.2xlarge,2737.92,1,D,236709943,37.646,1208.12,F,0x5050F69a9786F081509234F1a7F4684b5E5b76C9
