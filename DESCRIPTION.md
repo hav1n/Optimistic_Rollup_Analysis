@@ -1,124 +1,84 @@
 # Dataset Description
 
-This document describes each dataset included in this repository. All data correspond to the analysis presented in the paper *"From Cost Efficiency to Secure Design: Analyzing Operational Costs in Optimistic Rollups."*
+Column-level documentation for the datasets in `data/`. All monetary gas values
+are denominated in ETH unless stated otherwise; the paper converts to USD at
+P_ETH = $2,252, the April 2026 monthly average.
 
----
+## data/rollup_cross_section.csv
 
-## 1. `rollup_infrastructure.csv`
+One row per rollup (17 rows, including the two discontinued chains).
 
-**Corresponds to:** Table 1
+| Column | Description |
+|---|---|
+| `Rollup` | Chain name, the join key across all files in this repository. |
+| `Status` | `Active` or `Defunct` as of April 2026. |
+| `Stage` | Maturity classification: L2Beat Stage 0--2, or U0/U1 for chains below Stage 0 (U1 has a fraud-proof mechanism, U0 does not). |
+| `Built on` | Rollup stack (e.g., OP Stack, Arbitrum Nitro). |
+| `Fraud-proof` / `Proof System` | Dispute mechanism and its implementation. |
+| `Period` | Measurement month for this row. `Apr.26` for active rollups; discontinued rollups carry the last month with observable activity. |
+| `CPU` / `RAM` / `SSD` | Documented node hardware requirements. Where the CPU count was not disclosed, 4 vCPUs are assumed (OP Stack default). |
+| `Instance` | AWS EC2 instance matching the documented CPU/RAM requirement. |
+| `USD/Month` | Per-node monthly cost: on-demand instance rate (us-east-1, hourly rate x 730 h) plus SSD at $0.08 per GB-month. **TB-denominated SSD values are priced as 1,024 GB** (e.g., OP Mainnet: $121.47 + 1,024 x $0.08 = $203.39). Exception: Blast's 1 TB requirement is priced as 100 GB in the source data; the figure is retained as collected (see README). |
+| `#Sequencer` / `#Validator` | Operator-run node counts. For Morph, the validator count reflects the 8 actively operated challengers out of 38 registered. |
+| `Tx/month` | Transactions over the row's measurement month. Facet v1 and DeBank Chain are scaled from a 19-day daily average due to incomplete explorer data. |
+| `DA Gas (ETH)` | Monthly data-availability expenditure: calldata gas plus blob gas summed over every batch submission (see `da_decomposition_apr2026.csv` for the split). |
+| `L2 Fee (ETH)` | Monthly Layer 2 transaction-fee revenue. |
+| `Sequencer Address` | Layer 1 address used to extract batch submissions. Batcher EOAs are filtered as the transaction sender (`from`); inbox contracts (e.g., Arbitrum One, Morph) as the recipient (`to`). |
 
-**Description:**  
-Key infrastructure and cost attributes of 17 Optimistic Rollups, collected from official documentation, analytics platforms (L2Beat, Dune Analytics), community forums, and public blockchain data. Data reflects operational conditions during December 2024.
+## data/da_decomposition_apr2026.csv
 
-**Columns:**
+Calldata / blob decomposition of monthly DA cost, April 2026. Active rows are
+ordered by blob share (ascending), matching Table V of the paper.
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `Rollup` | string | Name of the Optimistic Rollup |
-| `Decentralization_Level` | int (1–4) | Classification level defined in Section 4.1 |
-| `Stage` | int (0–2) | Maturity stage per L2Beat/Buterin framework (Section 2.2) |
-| `Built_on` | string | Base technology stack (e.g., OP Stack, Arbitrum Nitro) |
-| `Fraud_proof` | string | Fraud-proof mechanism type; `N/A` if not yet implemented |
-| `CPU` | string | Required CPU specification for node operation |
-| `RAM` | string | Required RAM specification |
-| `SSD` | string | Required storage specification |
-| `AWS_Instance` | string | Equivalent AWS EC2 instance type |
-| `HW_Cost_USD_Month` | float | Monthly hardware cost in USD, based on AWS pricing (Dec 2024) |
-| `Num_Sequencers` | int | Number of sequencer nodes (1 for all observed rollups) |
-| `Num_Validators` | int or string | Number of validators; `Decentralized` indicates permissionless participation |
-| `Tx_per_Month` | int | Transaction count during December 2024 |
-| `DA_Gas_ETH` | float | Average DA gas cost per batch submission in ETH (Dec 2024) |
-| `L2_Fee_USD` | float | Average per-transaction L2 fee in USD (Dec 2024) |
-| `Incentive` | string | Validator incentive mechanism; empty if not applicable |
+| Column | Description |
+|---|---|
+| `rollup` | Chain name (join key). |
+| `status` | `active` (15 rows, reported in Table V) or `defunct` (2 rows). The defunct chains show only residual or zero activity in the April 2026 window and are excluded from Table V; their headline figures in the paper follow the `Period` column of the cross-section file. |
+| `calldata_eth` | Monthly calldata gas expenditure. |
+| `blob_eth` | Monthly blob gas expenditure (EIP-4844). |
+| `total_da_eth` | Sum of the two components. |
 
-**Notes:**
-- Fuel v1 values for DA gas and L2 fee are estimated from comparable rollups (see Section 3.4).
-- DA gas costs were computed by extracting batch submissions from sequencer addresses via Etherscan.
+Derived quantities in Table V follow as `blob share = blob_eth / total_da_eth`
+and `DA/tx = total_da_eth / (Tx/month)`.
 
----
+**Validation note.** For Morph, whose batches route through an inbox contract,
+the decomposition was cross-checked with both the inbox-recipient filter and the
+batcher-sender filter; the two agree within 0.02%. The batcher-filtered values
+are reported.
 
-## 2. `rollup_radar_normalized.csv`
+## data/rollup_radar_normalized.csv
 
-**Corresponds to:** Figure 2
+Inputs to the radar charts (Fig. 2). Per-transaction component values are
+normalized by a log transform followed by min--max scaling to [1, 10], so no
+single extreme value dominates the chart. The `Net Profit` and `Net Cost` axes
+are normalized separately for each sign group and are comparable only within a
+group (see the Fig. 2 caption).
 
-**Description:**  
-Normalized cost components used to generate the radar charts in Figure 2. All values are log-transformed and Min-Max scaled to the range [1, 10] following the procedure described in Appendix B. These values are derived from the raw data in `rollup_infrastructure.csv`.
+## data/timeseries/{arbitrum_one, op_mainnet, base}.csv
 
-**Columns:**
+Daily series, 1 January 2024 through 30 April 2026.
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `Rollup` | string | Name of the Optimistic Rollup |
-| `Decentralization_Level` | int (1–4) | Classification level |
-| `Sequencer` | float [1–10] | Normalized sequencer infrastructure cost |
-| `Validator` | float [1–10] | Normalized validator infrastructure cost |
-| `DA_Gas` | float [1–10] | Normalized data availability gas cost |
-| `L2_Fee` | float [1–10] | Normalized Layer 2 transaction fee |
-| `Net_Profit` | float [1–10] | Normalized net profit (revenue minus cost) |
+| Column | Description |
+|---|---|
+| `day` | UTC date. |
+| `tx_count` | Daily Layer 2 transaction count. |
+| `l2_fee_eth` | Daily Layer 2 fee revenue. |
+| `da_gas_eth` | Daily Layer 1 data-availability expenditure (calldata + blob) of the chain's batcher. |
 
-**Normalization formula** (Appendix B):
-```
-X' = log(X + ε)
-X_normalized = ((X' - min(X')) / (max(X') - min(X'))) × 9 + 1
-```
+Values are raw daily observations; the seven-day moving average shown in Fig. 5
+is applied by `figures/fig5_timeseries.py`, not in the data.
 
----
+## queries/
 
-## 3. `cost_estimation_inputs.csv`
+- `da_gas_batches.sql` — extracts every batch submission of a given Layer 1
+  address and sums calldata gas cost and blob fees per day. Placeholders and the
+  sender/recipient filter convention are documented in the file header.
+- `l2_tx_fee.sql` — daily transaction counts and Layer 2 fee revenue for a given
+  chain table.
 
-**Corresponds to:** Table 2, Figure 3
+## figures/
 
-**Description:**  
-Input parameters for the operational cost estimation model defined in Section 5.1. These parameters, combined with the cost formulas (Equations 2–6), produce the estimated monthly costs in Table 2 and the cost curves in Figure 3.
-
-**Columns:**
-
-| Column | Type | Description |
-|--------|------|-------------|
-| `Rollup` | string | Name of the Optimistic Rollup |
-| `Decentralization_Level` | int (1–4) | Classification level |
-| `TPS` | float | Observed transactions per second |
-| `C_seq` | float | Monthly cost per sequencer node (USD) |
-| `N_seq` | int | Number of sequencer nodes |
-| `C_val` | float | Monthly cost per validator node (USD) |
-| `N_val` | int | Number of validator nodes |
-| `S_batch` | int | Batch size (transactions per batch): 1,000 for Levels 1–2; 1,500 for Levels 3–4 |
-| `T_interval_min` | float | Median batch submission interval (minutes): 46.60 for Levels 1–2; 2.05 for Levels 3–4 |
-
-**Usage:**  
-To compute estimated monthly operational cost for a rollup, apply:
-```
-C_infra  = C_seq × N_seq + C_val × N_val
-N_batch  = max(Tx_month / S_batch, T_month / T_interval)
-B_DA     = N_batch × G_DA
-B_commit = (N_batch / R_commit) × G_commit
-C_total  = C_infra + B_DA + B_commit
-```
-where `G_DA` and `G_commit` are per-transaction gas costs in USD (derived from December 2024 average gas prices), and `R_commit` is the commit ratio (default: 1).
-
----
-
-## 4–6. Time-Series Data
-
-**Corresponds to:** Figures 4, 5, 6 and Section 5.2
-
-### `timeseries_arbitrum_one.csv` — Arbitrum One (Figure 4)
-### `timeseries_op_mainnet.csv` — OP Mainnet (Figure 5)
-### `timeseries_base.csv` — Base (Figure 6)
-
-**Description:**  
-Daily aggregated transaction data for the full year 2024 (January 1 – December 31), collected via Dune Analytics SQL queries. These data support the time-series analysis of transaction volumes, L1 gas expenditure, and L2 fee dynamics in Section 5.2.
-
-**Columns (identical across all three files):**
-
-| Column | Type | Description |
-|--------|------|-------------|
-| `date` | string (YYYY-MM-DD) | Calendar date |
-| `tx_count` | int | Total transactions processed on the rollup |
-| `l2_fee_eth` | float | Average per-transaction L2 fee in ETH |
-| `l1_gas_eth` | float | Total L1 gas expenditure by the sequencer in ETH |
-
-**Coverage:** 366 daily observations per rollup (2024 is a leap year).
-
-**SQL query template:** See Appendix C of the paper. The query joins rollup-side transaction data with Ethereum mainnet gas expenditure filtered by sequencer address.
+Python scripts (pandas, numpy, matplotlib) that regenerate the figures from the
+files above: `fig2_radar.py` (Fig. 2), `fig4_cost_breakdown.py` (Fig. 4),
+`fig5_timeseries.py` (Fig. 5). Each script reads only files in `data/` and
+writes a PDF to the working directory.
