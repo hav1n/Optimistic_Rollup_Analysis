@@ -4,7 +4,6 @@ This repository contains the datasets, query templates, and figure scripts accom
 
 > **Analysis on Operational Cost and Economic Sustainability of Optimistic Rollups**
 > Hojung Yang, Suhyeon Lee, Seungjoo Kim
-> *Under review at the IEEE Internet of Things Journal, 2026.*
 
 ## Overview
 
