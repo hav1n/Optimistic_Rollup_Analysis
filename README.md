@@ -3,7 +3,7 @@
 This repository contains the datasets, query templates, and figure scripts accompanying the paper:
 
 > **Analysis on Operational Cost and Economic Sustainability of Optimistic Rollups**
-> Hojung Yang, Suhyeon Lee, Seungjoo Kim
+> Hojung Yang, Seungjoo Kim
 
 ## Overview
 
@@ -94,7 +94,6 @@ recipient (`to`). See the header comments of each query for details.
 @article{yang2026oru,
   title   = {Analysis on Operational Cost and Economic Sustainability of Optimistic Rollups},
   author  = {Yang, Hojung and Lee, Suhyeon and Kim, Seungjoo},
-  journal = {IEEE Internet of Things Journal},
   year    = {2026},
   note    = {Under review}
 }
@@ -107,5 +106,4 @@ Released under CC BY 4.0. The figure scripts are provided under the same terms.
 ## Contact
 
 - Hojung Yang — ghwjd0816@korea.ac.kr
-- Suhyeon Lee — orion-alpha@korea.ac.kr
 - Seungjoo Kim — skim71@korea.ac.kr
